@@ -161,7 +161,7 @@ def scatter_executions_obj(fig_num, workload, executions, title=""):
 
 ####### Specify objectives #######
 def objective(k, exec_time, base):
-    _lamda = 250
+    _lamda = LAMDA
     cost = lambda x: base * x
     return exec_time + _lamda * cost(k)
 
@@ -196,9 +196,9 @@ def get_objs(workload, bases):
     return objs
 
 if __name__ == '__main__':
-    wc_hibench     = parse_file("../data/HiBench/wordcount_bigdata")
-    kmeans_hibench = parse_file("../data/HiBench/kmeans_huge")
-    pk_hibench     = parse_file('../data/HiBench/pagerank_huge')
+    wc_hibench     = parse_file("./data/HiBench/wordcount_bigdata")
+    kmeans_hibench = parse_file("./data/HiBench/kmeans_huge")
+    pk_hibench     = parse_file("./data/HiBench/pagerank_huge")
 
     bases = []
     for _ in range(15):
