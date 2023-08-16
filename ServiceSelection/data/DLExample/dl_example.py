@@ -10,7 +10,7 @@ from keras.layers.core import Dense, Dropout, Activation
 from keras.utils import np_utils
 
 # Spark Parameters
-MASTER_URL = 'spark://c220g1-030819.wisc.cloudlab.us:7077'
+MASTER_URL = '<insert master Spark Master URL>'
 
 
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
