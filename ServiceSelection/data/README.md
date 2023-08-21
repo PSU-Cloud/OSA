@@ -1,4 +1,4 @@
-# HiBench Workload Charectarization
+# Service Selection Workload Charectarization
 
 These results are reproducible by using the `workload_charectarization.py` script. You will need to have spark cluster and access to the [HiBench](https://github.com/Intel-bigdata/HiBench) scripts (you will need the filepaths to be updated in the script above) in order to reproduce similar results.
 
