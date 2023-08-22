@@ -104,7 +104,16 @@ MEDIA_DEPLOYMENTS = [
 ]
 
 
-## MICROSERVICES PARAMS
+# SETUP PARAMS
+# Specify your workload path
+WORKLOAD_PATH = "<INSERT WORKLOAD PATH HERE>"
+# Specify your wrk2 API address for the microservice
+API_ADDRS = "<INSERT WRK2 API ADDRESS FOR DEATHSTARBENCH>"
+
+
+
+
+## ANNEALING AND MICROSERVICES PARAMS
 #XXX: select the deployment to use for expirementation
 CONFIGURATIONS = [(i, 100, 100) for i in SOCIAL_DEPLOYMENTS]
 # CONFIGURATIONS = [(i, 100, 100) for i in HOTEL_DEPLOYMENTS]
@@ -118,6 +127,10 @@ POSSIBLE_CORES = [i for i in range(100, 1501, STEP_SIZE)]
 POSSIBLE_MEMS  = [i for i in range(100, 1501, STEP_SIZE)]
 
 KUBER_HOST = "<INSERT KUBERNETES HOST HERE>"
+# Define the bearer token we are going to use to authenticate.
+# See here to create the token:
+# https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/
+KUBE_TOKEN = "<INSERT KUBERNETES TOKEN HERE>"
 MICRO_HOST = "<INSERT MICROSERVICE HOST HERE>"
 
 ## EXPIREMENTAL PARAMS
@@ -264,20 +277,11 @@ def run_workload(configs, v1):
     CMD = "../wrk2/wrk -D exp -t {} -c {} -d {} -L -s ".format(NUM_THREADS, NUM_CONN,EPOCH_DURATION)
 
     # Compose post
-    # WORKLOAD_PATH = "./wrk2/scripts/social-network/compose-post.lua "
-    # API_ADDRS = "http://apt094.apt.emulab.net:32317/wrk2-api/post/compose "
-
-    # Read home Timeline
-    WORKLOAD_PATH = "./wrk2/scripts/social-network/read-home-timeline.lua "
-    API_ADDRS = "http://apt094.apt.emulab.net:32317/wrk2-api/home-timeline/read "
-
-
-    # Read user timeline
-    # WORKLOAD_PATH = "./wrk2/scripts/social-network/read-user-timeline.lua "
-    # API_ADDRS = "http://localhost:8080/wrk2-api/user-timeline/read "
+    _WORKLOAD_PATH = WORKLOAD_PATH
+    _API_ADDRS = API_ADDRS +" "
 
     REQ_RATE_ARG = "-R {} ".format(REQ_RATE)
-    CMD_STATEMENT = CMD + WORKLOAD_PATH + API_ADDRS + REQ_RATE_ARG + "> current_config.txt"
+    CMD_STATEMENT = CMD + _WORKLOAD_PATH + _API_ADDRS + REQ_RATE_ARG + "> current_config.txt"
     print("running: " + CMD_STATEMENT)
     os.system(CMD_STATEMENT)
 
@@ -324,10 +328,8 @@ def run_workload(configs, v1):
 
 def main():    
     global CONFIGURATIONS
-    # Define the bearer token we are going to use to authenticate.
-    # See here to create the token:
-    # https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/
-    aToken = "<INSERT KUBERNETES TOKEN HERE>" 
+
+    aToken = KUBE_TOKEN
     # Create a configuration object
     aConfiguration = client.Configuration()
     # Specify the endpoint of your Kube cluster
