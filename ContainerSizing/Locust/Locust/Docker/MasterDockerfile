@@ -1,0 +1,11 @@
+FROM python:3.9
+
+WORKDIR /locust
+
+COPY master.config .
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+EXPOSE 8089
+EXPOSE 5557
+ENTRYPOINT ["env", "LOCUST_HOME_TIMELINE=1", "LOCUST_USER_TIMELINE=1", "LOCUST_COMPOSE=1", "locust", "--config", "master.config"]

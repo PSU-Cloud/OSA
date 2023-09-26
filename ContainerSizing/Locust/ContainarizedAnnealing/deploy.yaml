@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-kubernetes-deployment
+  labels:
+    app: python-kubernetes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-kubernetes
+  template:
+    metadata:
+      labels:
+        app: python-kubernetes
+    spec:
+      containers:
+        - name: python-kubernetes-container
+          image: nna5040/python-kubernetes
+          command: ["python3"]
+          args: ["main.py", "locust-master.default.svc.cluster.local"]
+          ports:
+            - containerPort: 80
+

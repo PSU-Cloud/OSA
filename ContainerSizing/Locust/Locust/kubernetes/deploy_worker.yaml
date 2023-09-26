@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locust-worker
+  labels:
+    app: locust-worker
+spec:
+  replicas: 30
+  selector:
+    matchLabels:
+      app: locust-worker
+  template:
+    metadata:
+      labels:
+        app: locust-worker
+    spec:
+      nodeSelector:
+        locust: "true"
+      containers:
+        - name: locust-worker
+          image: nna5040/locust-ds-social:latest
+          command: ["env"]
+          args: ["LOCUST_HOME_TIMELINE=1", "LOCUST_USER_TIMELINE=1", "LOCUST_COMPOSE=2", "locust", "--master-host=locust-master.default.svc.cluster.local", "--master-port=5557" ,"--config", "worker.config"]
+

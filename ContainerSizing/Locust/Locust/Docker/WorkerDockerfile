@@ -1,0 +1,12 @@
+FROM python:3.9
+
+WORKDIR /locust
+
+COPY worker.config .
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+EXPOSE 8089
+EXPOSE 5557
+EXPOSE 5558
+ENTRYPOINT ["locust","--master-host", "172.17.0.2", "--config","worker.config"]

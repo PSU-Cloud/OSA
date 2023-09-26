@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locust-master
+  labels:
+    app: locust-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locust-master
+  template:
+    metadata:
+      labels:
+        app: locust-master
+    spec:
+      nodeSelector:
+        locust: "true"
+      containers:
+        - name: locust-master
+          image: nna5040/locust-ds-social:latest
+          env:
+            - name: LOCUST_MASTER_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          command: ["env"]
+          args: ["LOCUST_HOME_TIMELINE=1", "LOCUST_USER_TIMELINE=1", "LOCUST_COMPOSE=2", "locust", "--config", "master.config"]
+          ports:
+            - containerPort: 5557
+            - containerPort: 8089
+
